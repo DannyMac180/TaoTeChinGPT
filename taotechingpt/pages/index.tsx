@@ -13,7 +13,7 @@ export default function TaoTeChing() {
 
   const getTaoTeChingResponse = async (question: string) => {
     // Call the OpenAI API here and return the response
-    const OPENAI_API_KEY = process.env['OPENAI_API_KEY'];
+    const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
     const prompt = `Answer the following question or statement in the style of Stephen Mitchell's translation of the Tao Te Ching, ${question}`;
     
     const response = await axios.post(
@@ -21,7 +21,7 @@ export default function TaoTeChing() {
       {
         "model": "text-davinci-003",
         "prompt": prompt,
-        "max_tokens": 7,
+        "max_tokens": 100,
         "temperature": 0.7
       },
       {
