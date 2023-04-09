@@ -42,7 +42,7 @@ export default function TaoTeChing() {
       <h1>TaoTeChinGPT</h1>
       <form onSubmit={handleSubmit} className="form">
         <label>
-          Ask a question:
+          Ask a question to the Tao Te Ching:
           <input
             type="text"
             value={question}
