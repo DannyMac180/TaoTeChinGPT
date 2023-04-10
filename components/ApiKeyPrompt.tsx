@@ -3,7 +3,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 
 interface ApiKeyPromptProps {
-  onApiKeySubmit: (key: string) => void;
+  onApiKeySubmit: (apiKey: string | undefined) => void;
 }
 
 const ApiKeyPrompt: React.FC<ApiKeyPromptProps> = ({ onApiKeySubmit }) => {
@@ -13,7 +13,7 @@ const ApiKeyPrompt: React.FC<ApiKeyPromptProps> = ({ onApiKeySubmit }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/store-api-key', {
+      const response = await fetch('/api/storeApiKey', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
