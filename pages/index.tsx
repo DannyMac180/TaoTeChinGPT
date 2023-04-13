@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
-import ApiKeyPrompt from '/workspaces/TaoTeChinGPT/components/ApiKeyPrompt';
+
+import ApiKeyPrompt from '../components/ApiKeyPrompt';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
