@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import ApiKeyPrompt from '../components/ApiKeyPrompt';
+import AuthForm from '../components/AuthForm';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
@@ -45,6 +46,7 @@ export default function TaoTeChing() {
     <div className="container">
       <h1>TaoTeChinGPT</h1>
       {!apiKey && <ApiKeyPrompt onApiKeySubmit={setApiKey} />}
+      <AuthForm />
       <form onSubmit={handleSubmit} className="form">
         <label>
           Ask a question to the Tao Te Ching:
