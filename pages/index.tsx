@@ -43,7 +43,7 @@ export default function TaoTeChing() {
 
   return (
     <div className="container">
-      <h1>TaoTeChinGPT</h1>
+      <h1>Tao Te ChinGPT</h1>
       <AuthForm />
       <form onSubmit={handleSubmit} className="form">
         <label>
