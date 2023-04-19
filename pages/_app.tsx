@@ -1,13 +1,12 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app';
-import AuthListener from '../components/AuthListener';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <AuthListener />
-      <Component {...pageProps} />
-    </>
+      <AuthProvider>
+       <Component {...pageProps} />
+      </AuthProvider>
   );
 }
 export default MyApp;
