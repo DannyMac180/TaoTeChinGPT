@@ -1,5 +1,6 @@
 import React from 'react';
 import { auth, googleProvider } from '../lib/firebase';
+import styles from '../styles/Home.module.css';
 
 const AuthForm: React.FC = () => {
   // ...
@@ -13,7 +14,7 @@ const AuthForm: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles.button}>
       {/* ... */}
       <button onClick={handleGoogleSignIn}>Sign in with Google</button>
     </div>
