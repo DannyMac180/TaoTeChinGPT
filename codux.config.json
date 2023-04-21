@@ -3,5 +3,5 @@
     "newComponent": {
         "componentsPath": "src/components",
         "templatesPath": "src/component-templates"
-    } 
+    }
 }  
