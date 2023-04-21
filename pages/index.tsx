@@ -44,7 +44,6 @@ export default function TaoTeChing() {
   return (
     <div className="container">
       <h1>Tao Te ChinGPT</h1>
-      <AuthForm />
       <form onSubmit={handleSubmit} className="form">
         <label>
           Ask a question to the Tao Te Ching:
@@ -56,6 +55,7 @@ export default function TaoTeChing() {
           />
         </label>
         <button type="submit">Ask</button>
+        <AuthForm />
       </form>
       {response && <div className="response">{response}</div>}
     </div>
