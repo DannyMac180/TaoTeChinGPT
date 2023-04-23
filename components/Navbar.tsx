@@ -30,16 +30,6 @@ export default function Navbar() {
             <li className="push-left">
               <button onClick={signOut}>Sign Out</button>
             </li>
-            <li>
-              <Link href="/admin">
-                <button className="btn-blue">Write Posts</button>
-              </Link>
-            </li>
-            <li>
-              <Link href={`/${username}`}>
-                <img src={user?.photoURL || '/hacker.png'} />
-              </Link>
-            </li>
           </>
         )}
 
