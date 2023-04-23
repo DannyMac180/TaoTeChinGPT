@@ -1,5 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/storage";
 
 // Replace with your Firebase configuration object
 const firebaseConfig = {
@@ -17,5 +19,7 @@ if (!firebase.apps.length) {
 
 const auth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+const firestore = firebase.firestore();
+const storage = firebase.storage();
 
 export { auth, googleProvider};
