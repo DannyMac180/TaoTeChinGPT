@@ -1,41 +1,57 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
+import { auth } from '../lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
+import { UserContext } from '@/contexts/UserContext';
 
+export default function Navbar() {
+  const { user, username } = useContext(UserContext);
 
-// Define the interface for the component's props
-interface NavbarProps {
-    isLoggedIn: boolean;
-    username?: string;
+  const router = useRouter();
+
+  const signOut =  () => {
+    auth.signOut();
+    router.reload();
+  }
+
+  return (
+    <nav className="navbar">
+      <ul>
+        <li>
+          <Link href="/">
+            <button className="btn-logo">TAO TE CHINGPT</button>
+          </Link>
+        </li>
+
+        {/* user is signed-in and has username */}
+        {username && (
+          <>
+            <li className="push-left">
+              <button onClick={signOut}>Sign Out</button>
+            </li>
+            <li>
+              <Link href="/admin">
+                <button className="btn-blue">Write Posts</button>
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${username}`}>
+                <img src={user?.photoURL || '/hacker.png'} />
+              </Link>
+            </li>
+          </>
+        )}
+
+        {/* user is not signed OR has not created username */}
+        {!username && (
+          <li>
+            <Link href="/enter">
+              <button className="btn-blue">Log in</button>
+            </Link>
+          </li>
+        )}
+      </ul>
+    </nav>
+  );
 }
-
-// Use the interface as a generic parameter for the functional component
-const Navbar: React.FunctionComponent<NavbarProps> = ({ isLoggedIn, username }) => {
-    return (
-        <nav className="navbar">
-            <div className="navbar-left">
-                <ul>
-                    <li>
-                        {/* Logo with link to the root page */}
-                        <Link href="/" className="navbar-logo">
-                            Logo
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-            <div className="navbar-right">
-                {isLoggedIn ? (
-                    // Display the username if the user is logged in
-                    <span className="navbar-username">{username}</span>
-                ) : (
-                    // Display the "Login" button if the user is not logged in
-                    <Link href="/auth" className="navbar-login">
-                        Login
-                    </Link>
-                )}
-            </div>
-        </nav>
-    );
-};
-
-export default Navbar;

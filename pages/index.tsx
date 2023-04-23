@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
 import AuthForm from '../components/AuthForm';
-import Navbar from '@/components/Navbar';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
@@ -44,7 +43,6 @@ export default function TaoTeChing() {
 
   return (
     <div className="container">
-      <Navbar isLoggedIn={false} />
       <h1>Tao Te ChinGPT</h1>
       <form onSubmit={handleSubmit} className="form">
         <label>
