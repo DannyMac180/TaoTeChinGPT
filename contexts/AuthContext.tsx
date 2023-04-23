@@ -6,6 +6,7 @@ import { auth, googleProvider } from '../lib/firebase';
 interface AuthContextData {
   user: User | null;
   loading: boolean;
+  username: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -57,3 +58,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 export const useAuth = () => {
   return useContext(AuthContext);
 };
+
+export default AuthContext;
