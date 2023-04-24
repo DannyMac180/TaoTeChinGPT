@@ -1,14 +1,17 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { auth } from '../lib/firebase';
-import { useAuth } from '@/contexts/AuthContext';
+import { auth, googleProvider } from '../lib/firebase';
 import { UserContext } from '@/contexts/UserContext';
 
 export default function Navbar() {
-  const { user, username } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const router = useRouter();
+
+  const signIn =  () => {
+    auth.signInWithPopup(googleProvider);
+  }
 
   const signOut =  () => {
     auth.signOut();
@@ -25,7 +28,7 @@ export default function Navbar() {
         </li>
 
         {/* user is signed-in and has username */}
-        {username && (
+        {user && (
           <>
             <li className="push-left">
               <button onClick={signOut}>Sign Out</button>
@@ -34,11 +37,9 @@ export default function Navbar() {
         )}
 
         {/* user is not signed OR has not created username */}
-        {!username && (
+        {!user && (
           <li>
-            <Link href="/enter">
-              <button className="btn-blue">Log in</button>
-            </Link>
+              <button className="btn-blue" onClick={signIn}>Log in</button>
           </li>
         )}
       </ul>
