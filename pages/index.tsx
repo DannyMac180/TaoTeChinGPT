@@ -55,7 +55,6 @@ export default function TaoTeChing() {
           />
         </label>
         <button type="submit">Ask</button>
-        <AuthForm />
       </form>
       {response && <div className="response">{response}</div>}
     </div>
