@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import AuthForm from '../components/AuthForm';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
@@ -55,7 +54,6 @@ export default function TaoTeChing() {
           />
         </label>
         <button type="submit">Ask</button>
-        <AuthForm />
       </form>
       {response && <div className="response">{response}</div>}
     </div>

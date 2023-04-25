@@ -1,7 +1,7 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
-import "firebase/compat/storage";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 
 // Replace with your Firebase configuration object
 const firebaseConfig = {
@@ -22,4 +22,4 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 const firestore = firebase.firestore();
 const storage = firebase.storage();
 
-export { auth, googleProvider};
+export { auth, googleProvider, firestore, storage};
