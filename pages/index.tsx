@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import AuthForm from '../components/AuthForm';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
