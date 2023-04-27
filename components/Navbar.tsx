@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { auth, googleProvider } from '../lib/firebase';
 import { UserContext } from '@/contexts/UserContext';
+import { useUserData } from '@/lib/hooks';
 
 export default function Navbar() {
   const { user } = useContext(UserContext);
@@ -27,11 +28,16 @@ export default function Navbar() {
           </Link>
         </li>
 
-        {/* user is signed-in and has username */}
+        {/* user is signed-in */}
         {user && (
           <>
             <li className="push-left">
               <button onClick={signOut}>Sign Out</button>
+            </li>
+            <li>
+              <Link href="/profile/[user]">
+                <img src={ user?.photoURL } />
+              </Link>
             </li>
           </>
         )}
