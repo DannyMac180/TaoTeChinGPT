@@ -1,15 +1,8 @@
+import { User } from 'firebase/auth';
 import { createContext } from 'react';
 
-interface User {
-  uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
-  // Add other properties as necessary
-}
-
 interface UserContextType {
-  user: User | null;
+  user: User | undefined;
 }
 
-export const UserContext = createContext<UserContextType>({ user: null });
+export const UserContext = createContext<UserContextType>({ user: undefined });

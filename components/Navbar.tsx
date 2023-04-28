@@ -11,7 +11,7 @@ export default function Navbar() {
 
   const router = useRouter();
 
-  async function createUserDocument(user: User | null ) {
+  async function createUserDocument(user: User | undefined ) {
     if (!user) return;
 
     const { uid, email, displayName, photoURL } = user;
