@@ -60,7 +60,7 @@ export default function Navbar() {
             </li>
             <li>
               <Link href="/profile/[user]">
-                <img src={ user?.photoURL} />
+                <img src={ user?.photoURL ?? undefined} />
               </Link>
             </li>
           </>
