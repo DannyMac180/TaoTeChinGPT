@@ -1,44 +1,19 @@
 import Link from 'next/link';
-import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { auth, googleProvider, serverTimestamp } from '../lib/firebase';
+import { auth, googleProvider } from '../lib/firebase';
 import { UserContext } from '@/contexts/UserContext';
-import { firestore } from '@/lib/firebase';
 
 export default function Navbar() {
   const { user } = useContext(UserContext);
 
   const router = useRouter();
 
-  async function createUserDocument(user: User | undefined ) {
-    if (!user) return;
-
-    const { uid, email, displayName, photoURL } = user;
-    const userRef = firestore.doc(`users/${uid}`);
-    const snapshot = await userRef.get();
-
-    if (!snapshot.exists) {
-      try {
-        await userRef.set({
-          uid,
-          email,
-          displayName,
-          photoURL,
-          createdAt: serverTimestamp(),
-        });
-      } catch (error) {
-        console.error('Error creating user document', error);
-      }
-    }
-  }
-
-  const signIn =  () => {
+  const signIn = () => {
     auth.signInWithPopup(googleProvider);
-    createUserDocument(user);
   }
 
-  const signOut =  () => {
+  const signOut = () => {
     auth.signOut();
     router.reload();
   }
@@ -60,7 +35,7 @@ export default function Navbar() {
             </li>
             <li>
               <Link href="/profile/[user]">
-                <img src={ user?.photoURL ?? undefined} />
+                <img src={user?.photoURL ?? undefined} />
               </Link>
             </li>
           </>
@@ -69,7 +44,7 @@ export default function Navbar() {
         {/* user is not signed OR has not created username */}
         {!user && (
           <li>
-              <button className="btn-blue" onClick={signIn}>Log in</button>
+            <button className="btn-blue" onClick={signIn}>Log in</button>
           </li>
         )}
       </ul>
