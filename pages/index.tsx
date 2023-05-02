@@ -43,7 +43,7 @@ export default function TaoTeChing() {
   return (
     <div className="container">
       <div style={{ textAlign: "center" }}>
-        <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682908365/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_t39jnz.png" alt="taoist_philosophy" style={{ width: "50%", height: "50%" }} />
+        <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682979603/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_1_m5qfxj.png" alt="taoist_philosophy" style={{ width: "100%", height: "25%" }} />
       </div>
       <h1>Tao Te ChinGPT</h1>
       <form onSubmit={handleSubmit} className="form">
