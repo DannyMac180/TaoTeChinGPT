@@ -41,24 +41,24 @@ export default function TaoTeChing() {
   };
 
   return (
-    <div className="container">
+    <div className="tao-container">
       <div style={{ textAlign: "center" }}>
         <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682979603/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_1_m5qfxj.png" alt="taoist_philosophy" style={{ width: "100%", height: "25%" }} />
       </div>
-      <h1>Tao Te ChinGPT</h1>
-      <form onSubmit={handleSubmit} className="form">
-        <label>
+      <h1 className="tao-title">Tao Te ChinGPT</h1>
+      <form onSubmit={handleSubmit} className="tao-form">
+        <label className="tao-label">
           Ask a question to the Tao Te Ching:
           <input
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            className="input-field"
+            className="tao-input"
           />
         </label>
-        <button type="submit">Ask</button>
+        <button type="submit" className="tao-button">Ask</button>
       </form>
-      {response && <div className="response">{response}</div>}
+      {response && <div className="tao-response">{response}</div>}
     </div>
   );
 }
