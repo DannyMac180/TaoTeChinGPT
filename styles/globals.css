@@ -361,7 +361,6 @@ input[type="file"] {
   font-size: 16px;
   white-space: pre-wrap; /* Preserves whitespace and line-breaks */
   animation: answer_fadeIn__qcpHP .5s ease-in-out forwards;
-    opacity: 0
 }
 
 @keyframes type {
