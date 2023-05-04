@@ -58,7 +58,7 @@ export default function TaoTeChing() {
         </label>
         <button type="submit" className="tao-button">Ask</button>
       </form>
-      {response && <div className="tao-response">{response}</div>}
+      {response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
     </div>
   );
 }
