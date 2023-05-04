@@ -360,7 +360,8 @@ input[type="file"] {
   padding-left: 10px;
   font-size: 16px;
   white-space: pre-wrap; /* Preserves whitespace and line-breaks */
-  animation: type 4s steps(60, end); /* Adjust time and steps for different typing speeds */
+  animation: answer_fadeIn__qcpHP .5s ease-in-out forwards;
+    opacity: 0
 }
 
 @keyframes type {
