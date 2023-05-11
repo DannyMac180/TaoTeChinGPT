@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Loader from '../components/Loader';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState<string | undefined>(
     process.env.NEXT_PUBLIC_OPENAI_API_KEY
   );
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setIsLoading(true);
     if (apiKey) {
       const result = await getTaoTeChingResponse(question, apiKey);
       setResponse(result);
+      setIsLoading(false);
     }
   };
 
@@ -56,7 +60,11 @@ export default function TaoTeChing() {
             className="tao-input"
           />
         </label>
-        <button type="submit" className="tao-button">Ask</button>
+        {isLoading ? (
+          <Loader show={true} />
+        ) : (
+          <button type="submit" className="tao-button">Ask</button>
+        )}
       </form>
       {response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
     </div>
