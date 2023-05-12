@@ -207,6 +207,7 @@ button.btn-logo {
 /* Loader */
 
 .loader {
+  margin: 0 auto;
   border: 10px solid var(--color-bg);
   border-top: 10px solid var(--color-blue);
   border-radius: 50%;
@@ -331,6 +332,7 @@ input[type="file"] {
   border-radius: 3px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin: 0;
 }
 
 .tao-button:hover {
