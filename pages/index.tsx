@@ -28,6 +28,7 @@ export default function TaoTeChing() {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
+        model: 'gpt-4',
         messages: [{"role": "system", "content": prompt},
                    {"role": "user", "content": question}]
 
