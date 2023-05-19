@@ -23,16 +23,14 @@ export default function TaoTeChing() {
   const getTaoTeChingResponse = async (question: string, apiKey: string) => {
     // Call the OpenAI API here and return the response
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
-    Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple 4. Human
-    Question: ${question}}`;
+    Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple 4. Human`;
 
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4',
-        prompt: prompt,
-        max_tokens: 200,
-        temperature: 0.7,
+        messages: [{"role": "system", "content": prompt},
+                   {"role": "user", "content": question}]
+
       },
       {
         headers: {
@@ -42,7 +40,7 @@ export default function TaoTeChing() {
       }
     );
 
-    const generatedText = response.data.choices[0].text.trim();
+    const generatedText = response.data.choices[0].message.content.trim();
     return generatedText;
   };
 
