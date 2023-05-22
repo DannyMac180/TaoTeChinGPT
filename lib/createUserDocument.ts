@@ -12,13 +12,14 @@ export const createUserDocument = async (user: { uid?: any; email?: any; display
     if (!snapshot.exists) {
       const { email, displayName } = user;
       const createdAt = new Date();
+      const credits = 10;
   
       try {
         await userRef.set({
           displayName,
           email,
           createdAt,
-          credits: 10
+          credits
         });
       } catch (error) {
         console.error('Error creating user', (error as Error).message);
