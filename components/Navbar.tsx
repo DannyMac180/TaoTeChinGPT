@@ -6,6 +6,7 @@ import { UserContext } from '@/contexts/UserContext';
 
 export default function Navbar() {
   const { user } = useContext(UserContext);
+  const { credits } = useContext(UserContext);
 
   const router = useRouter();
 
@@ -37,6 +38,9 @@ export default function Navbar() {
               <Link href="/profile/[user]">
                 <img src={user?.photoURL ?? undefined} />
               </Link>
+            </li>
+            <li>
+              <span>{credits ?? undefined}</span>
             </li>
           </>
         )}
