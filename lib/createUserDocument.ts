@@ -1,6 +1,6 @@
 import { firestore } from './firebase';
 
-export const createUserDocument = async (user: { uid?: any; email?: any; displayName?: any; credits?: any}) => {
+export const createUserDocument = async (user: { uid?: any; email?: any; displayName?: any}) => {
     if (!user) return;
   
     // Get a reference to the Firestore document
@@ -12,16 +12,17 @@ export const createUserDocument = async (user: { uid?: any; email?: any; display
     if (!snapshot.exists) {
       const { email, displayName } = user;
       const createdAt = new Date();
+      const credits = 10; // Default number of credits
   
       try {
         await userRef.set({
           displayName,
           email,
           createdAt,
-          credits: 10
+          credits // Add credits field to the document
         });
       } catch (error) {
         console.error('Error creating user', (error as Error).message);
       }
     }
-  }
+}
