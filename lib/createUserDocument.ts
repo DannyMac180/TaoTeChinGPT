@@ -1,6 +1,6 @@
 import { firestore } from './firebase';
 
-export const createUserDocument = async (user: { uid?: any; email?: any; displayName?: any; }) => {
+export const createUserDocument = async (user: { uid?: any; email?: any; displayName?: any; credits?: any}) => {
     if (!user) return;
   
     // Get a reference to the Firestore document
