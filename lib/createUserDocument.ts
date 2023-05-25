@@ -15,6 +15,7 @@ export const createUserDocument = async (user: { uid?: any; email?: any; display
       const credits = 10; // Default number of credits
   
       try {
+        console.log('Credits value: ', credits);
         await userRef.set({
           displayName,
           email,
