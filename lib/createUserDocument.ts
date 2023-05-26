@@ -12,10 +12,9 @@ export const createUserDocument = async (user: { uid?: any; email?: any; display
     if (!snapshot.exists) {
       const { email, displayName } = user;
       const createdAt = new Date();
-      const credits = 10; // Default number of credits
+      const credits: number = 10; // Default number of credits
   
       try {
-        console.log('Credits value: ', credits);
         await userRef.set({
           displayName,
           email,
