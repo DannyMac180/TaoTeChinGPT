@@ -1,28 +1,29 @@
-import { firestore } from './firebase';
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
-export const createUserDocument = async (user: { uid?: any; email?: any; displayName?: any}) => {
-    if (!user) return;
-  
-    // Get a reference to the Firestore document
-    const userRef = firestore.doc(`users/${user.uid}`);
-  
-    // Go and fetch the document from that location
-    const snapshot = await userRef.get();
-  
-    if (!snapshot.exists) {
-      const { email, displayName } = user;
-      const createdAt = new Date();
-      const credits: number = 10; // Default number of credits
-  
-      try {
-        await userRef.set({
-          displayName,
-          email,
-          createdAt,
-          credits // Add credits field to the document
-        });
-      } catch (error) {
-        console.error('Error creating user', (error as Error).message);
-      }
+admin.initializeApp();
+
+export const onCreateUser = functions.auth.user().onCreate(async (user) => {
+  const userRef = admin.firestore().doc(`users/${user.uid}`);
+  const snapshot = await userRef.get();
+
+  if (!snapshot.exists) {
+    const { email, displayName } = user;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt
+      });
+
+      const creditsRef = admin.firestore().doc(`credits/${user.uid}`);
+      await creditsRef.set({
+        credits: 10
+      });
+    } catch (error) {
+      console.error('Error creating user', error);
     }
-}
+  }
+});
