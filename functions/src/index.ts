@@ -3,21 +3,24 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp();
 
-const db = admin.firestore();
+export const onCreateUser = functions.auth.user().onCreate(async (user) => {
+  const userRef = admin.firestore().doc(`users/${user.uid}`);
+  const snapshot = await userRef.get();
 
-export const createUserRecord = functions.auth.user().onCreate((user) => {
-    return db.collection('users').doc(user.uid).set({
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    })
-    .then(() => {
-        console.log(`User ${user.uid} added to Firestore`);
-        return null;
-    })
-    .catch(error => {
-        console.error('Error adding user to Firestore', error);
-        return null;
-    });
+  if (!snapshot.exists) {
+    const { email, displayName } = user;
+    const createdAt = new Date();
+    const credits = 10;
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        credits
+      });
+    } catch (error) {
+      console.error('Error creating user', error);
+    }
+  }
 });
