@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import { Analytics } from '@vercel/analytics/react';
-import { UserContext } from '@/contexts/UserContext';
+import { UserContextProvider } from '@/contexts/UserContext';
 import { useUserData } from '@/lib/hooks';
 import '../styles/globals.css'
 
@@ -9,10 +9,10 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <UserContext.Provider value={userData}>
+      <UserContextProvider value={userData}>
         <Navbar />
         <Component {...pageProps} />
-      </UserContext.Provider>
+      </UserContextProvider>
       <Analytics />
     </>
   );
