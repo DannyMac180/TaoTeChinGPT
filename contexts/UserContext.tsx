@@ -14,7 +14,7 @@ interface UserContextProviderProps {
 
 export const UserContext = createContext<UserContextType>({ user: undefined, credits: undefined });
 
-const UserContextProvider: React.FC<UserContextProviderProps> = ({ children }) => {
+export const UserContextProvider: React.FC<UserContextProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [credits, setCredits] = useState<number | undefined>(undefined);
 
@@ -45,5 +45,3 @@ const UserContextProvider: React.FC<UserContextProviderProps> = ({ children }) =
     </>
   );
 };
-
-export default UserContextProvider;
