@@ -45,3 +45,5 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
     </>
   );
 };
+
+export default UserContext;

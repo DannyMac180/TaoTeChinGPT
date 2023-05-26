@@ -5,8 +5,7 @@ import { auth, googleProvider } from '../lib/firebase';
 import { UserContext } from '@/contexts/UserContext';
 
 export default function Navbar() {
-  const { user } = useContext(UserContext);
-  const { credits } = useContext(UserContext);
+  const { user, credits } = useContext(UserContext);
 
   const router = useRouter();
 
