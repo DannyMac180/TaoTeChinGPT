@@ -24,13 +24,18 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
 
     if (user) {
       setUser(user);
-      
+
       const userDocRef = firestore.collection('users').doc(user.uid);
 
       const fetchUserData = async () => {
-        const userDoc = await userDocRef.get();
-        const userData = userDoc.data();
-        setCredits(userData?.credits);
+        try {
+          const userDoc = await userDocRef.get();
+          const userData = userDoc.data();
+          setCredits(userData?.credits);
+        } catch (error) {
+          console.error("Error fetching user data: ", error);
+          // Handle or display the error to the user as appropriate for your app
+        }
       };
 
       fetchUserData();
@@ -46,4 +51,4 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
   );
 };
 
-export default UserContext;
+export default UserContextProvider;
