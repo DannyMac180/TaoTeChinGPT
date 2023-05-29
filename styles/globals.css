@@ -107,22 +107,23 @@ code {
 }
 
 .navbar span {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 20px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   background-color: var(--color-gray);
   color: black;
-  font-family: 'Noto Sans', sans-serif;
-  font-weight: bold;
   text-align: center;
-  line-height: 15px;
-  border: 2px solid black;
+  line-height: 20px;
 }
 
 .navbar span .credits {
   font-size: 0.8em;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: bold;
 }
 
 /* Buttons */
