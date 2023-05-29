@@ -1,5 +1,4 @@
 import { User } from 'firebase/auth';
-import { getAuth } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import { firestore } from '../lib/firebase';
 import { useUserData } from '@/lib/hooks';
@@ -23,7 +22,6 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
     if (user) {
       const fetchUserData = async () => {
         try {
-          console.log("Fetching user data");
           const userRef = firestore.collection('users').doc(user.uid);
           const userData = await userRef.get();
           if (userData.exists) {
