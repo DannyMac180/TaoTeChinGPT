@@ -39,7 +39,10 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
-              <span>{credits ?? undefined}</span>
+              <span>
+                <span className="credits">{credits ?? undefined}</span>
+                <span className="token">Token</span>
+              </span>
             </li>
           </>
         )}
