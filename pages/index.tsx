@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import Loader from '../components/Loader';
+import { UserContext } from '@/contexts/UserContext';
+import decrementCredits from '@/lib/decrementCredits';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { user, credits } = useContext(UserContext);
   const [apiKey, setApiKey] = useState<string | undefined>(
     process.env.NEXT_PUBLIC_OPENAI_API_KEY
   );
@@ -17,6 +20,9 @@ export default function TaoTeChing() {
       const result = await getTaoTeChingResponse(question, apiKey);
       setResponse(result);
       setIsLoading(false);
+      if (user) {
+        decrementCredits(user.uid);
+      }
     }
   };
 
