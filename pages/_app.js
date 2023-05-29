@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <UserContextProvider value={userData}>
+      <UserContextProvider>
         <Navbar />
         <Component {...pageProps} />
       </UserContextProvider>
