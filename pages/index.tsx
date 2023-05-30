@@ -1,27 +1,27 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import Loader from '../components/Loader';
+import { UserContext } from '@/contexts/UserContext';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { user, credits } = useContext(UserContext);
   const [apiKey, setApiKey] = useState<string | undefined>(
     process.env.NEXT_PUBLIC_OPENAI_API_KEY
   );
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setIsLoading(true);
-    if (apiKey) {
-      const result = await getTaoTeChingResponse(question, apiKey);
-      setResponse(result);
-      setIsLoading(false);
+  const decrementCredits = async (uid: string) => {
+    try {
+      const response = await axios.post('/api/decrementCredits', { uid });
+      console.log(response.data.message);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const getTaoTeChingResponse = async (question: string, apiKey: string) => {
-    // Call the OpenAI API here and return the response
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
     Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple. The response should be in prose that is relevant to the question and not rhyming poetry.`;
 
@@ -29,9 +29,8 @@ export default function TaoTeChing() {
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-4',
-        messages: [{"role": "system", "content": prompt},
-                   {"role": "user", "content": question}]
-
+        messages: [{ "role": "system", "content": prompt },
+        { "role": "user", "content": question }]
       },
       {
         headers: {
@@ -43,6 +42,19 @@ export default function TaoTeChing() {
 
     const generatedText = response.data.choices[0].message.content.trim();
     return generatedText;
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (apiKey) {
+      const result = await getTaoTeChingResponse(question, apiKey);
+      setResponse(result);
+      setIsLoading(false);
+      if (user) {
+        decrementCredits(user.uid);
+      }
+    }
   };
 
   return (
@@ -68,6 +80,6 @@ export default function TaoTeChing() {
         )}
       </form>
       {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
-    </div>
+    </div >
   );
 }
