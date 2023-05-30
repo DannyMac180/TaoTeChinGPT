@@ -8,7 +8,7 @@ export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { user, credits } = useContext(UserContext);
+  const {user, credits} = useContext(UserContext);
   const [apiKey, setApiKey] = useState<string | undefined>(
     process.env.NEXT_PUBLIC_OPENAI_API_KEY
   );
