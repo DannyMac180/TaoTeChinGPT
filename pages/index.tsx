@@ -22,7 +22,6 @@ export default function TaoTeChing() {
   };
 
   const getTaoTeChingResponse = async (question: string, apiKey: string) => {
-    // Call the OpenAI API here and return the response
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
     Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple. The response should be in prose that is relevant to the question and not rhyming poetry.`;
 
@@ -32,7 +31,6 @@ export default function TaoTeChing() {
         model: 'gpt-4',
         messages: [{ "role": "system", "content": prompt },
         { "role": "user", "content": question }]
-
       },
       {
         headers: {
@@ -56,32 +54,32 @@ export default function TaoTeChing() {
       if (user) {
         decrementCredits(user.uid);
       }
-    };
+    }
+  };
 
-    return (
-      <div className="tao-container">
-        <div style={{ textAlign: "center" }}>
-          <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682979603/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_1_m5qfxj.png" alt="taoist_philosophy" style={{ width: "100%", height: "25%" }} />
-        </div>
-        <h1 className="tao-title">Tao Te ChinGPT</h1>
-        <form onSubmit={handleSubmit} className="tao-form">
-          <label className="tao-label">
-            Ask a question to the Tao Te Ching:
-            <input
-              type="text"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              className="tao-input"
-            />
-          </label>
-          {isLoading ? (
-            <Loader show={true} />
-          ) : (
-            <button type="submit" className="tao-button">Ask</button>
-          )}
-        </form>
-        {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
+  return (
+    <div className="tao-container">
+      <div style={{ textAlign: "center" }}>
+        <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682979603/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_1_m5qfxj.png" alt="taoist_philosophy" style={{ width: "100%", height: "25%" }} />
       </div>
-    );
-  }
+      <h1 className="tao-title">Tao Te ChinGPT</h1>
+      <form onSubmit={handleSubmit} className="tao-form">
+        <label className="tao-label">
+          Ask a question to the Tao Te Ching:
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            className="tao-input"
+          />
+        </label>
+        {isLoading ? (
+          <Loader show={true} />
+        ) : (
+          <button type="submit" className="tao-button">Ask</button>
+        )}
+      </form>
+      {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
+    </div >
+  );
 }
