@@ -2,27 +2,22 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
-import decrementCredits from '@/lib/decrementCredits';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const {user, credits} = useContext(UserContext);
+  const { user, credits } = useContext(UserContext);
   const [apiKey, setApiKey] = useState<string | undefined>(
     process.env.NEXT_PUBLIC_OPENAI_API_KEY
   );
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setIsLoading(true);
-    if (apiKey) {
-      const result = await getTaoTeChingResponse(question, apiKey);
-      setResponse(result);
-      setIsLoading(false);
-      if (user) {
-        decrementCredits(user.uid);
-      }
+  const decrementCredits = async (uid: string) => {
+    try {
+      const response = await axios.post('/api/decrementCredits', { uid });
+      console.log(response.data.message);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -35,8 +30,8 @@ export default function TaoTeChing() {
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-4',
-        messages: [{"role": "system", "content": prompt},
-                   {"role": "user", "content": question}]
+        messages: [{ "role": "system", "content": prompt },
+        { "role": "user", "content": question }]
 
       },
       {
@@ -51,29 +46,42 @@ export default function TaoTeChing() {
     return generatedText;
   };
 
-  return (
-    <div className="tao-container">
-      <div style={{ textAlign: "center" }}>
-        <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682979603/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_1_m5qfxj.png" alt="taoist_philosophy" style={{ width: "100%", height: "25%" }} />
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (apiKey) {
+      const result = await getTaoTeChingResponse(question, apiKey);
+      setResponse(result);
+      setIsLoading(false);
+      if (user) {
+        decrementCredits(user.uid);
+      }
+    };
+
+    return (
+      <div className="tao-container">
+        <div style={{ textAlign: "center" }}>
+          <img src="https://res.cloudinary.com/dmcmhshoe/image/upload/v1682979603/0_Taoist_philosopher_natural_landscape_profile_hi_esrgan-v1-x2plus_1_m5qfxj.png" alt="taoist_philosophy" style={{ width: "100%", height: "25%" }} />
+        </div>
+        <h1 className="tao-title">Tao Te ChinGPT</h1>
+        <form onSubmit={handleSubmit} className="tao-form">
+          <label className="tao-label">
+            Ask a question to the Tao Te Ching:
+            <input
+              type="text"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              className="tao-input"
+            />
+          </label>
+          {isLoading ? (
+            <Loader show={true} />
+          ) : (
+            <button type="submit" className="tao-button">Ask</button>
+          )}
+        </form>
+        {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
       </div>
-      <h1 className="tao-title">Tao Te ChinGPT</h1>
-      <form onSubmit={handleSubmit} className="tao-form">
-        <label className="tao-label">
-          Ask a question to the Tao Te Ching:
-          <input
-            type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            className="tao-input"
-          />
-        </label>
-        {isLoading ? (
-          <Loader show={true} />
-        ) : (
-          <button type="submit" className="tao-button">Ask</button>
-        )}
-      </form>
-      {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
-    </div>
-  );
+    );
+  }
 }
