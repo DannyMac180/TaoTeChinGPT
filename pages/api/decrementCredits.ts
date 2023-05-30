@@ -7,6 +7,7 @@ export default async function handler(
 ) {
   const { uid } = req.body;
   const userRef = admin.firestore().collection('users').doc(uid);
+
   try {
     const userDoc = await userRef.get();
     if (!userDoc.exists) {
