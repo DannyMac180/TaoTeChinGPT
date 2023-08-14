@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
+import { auth, googleProvider } from '@/lib/firebase';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
@@ -11,6 +12,9 @@ export default function TaoTeChing() {
   const [apiKey, setApiKey] = useState<string | undefined>(
     process.env.NEXT_PUBLIC_OPENAI_API_KEY
   );
+  const signIn = () => {
+    auth.signInWithPopup(googleProvider);
+  }
 
   const decrementCredits = async (uid: string) => {
     try {
@@ -73,6 +77,11 @@ export default function TaoTeChing() {
             className="tao-input"
           />
         </label>
+        {user ? (
+          <button type="submit" className="tao-button">Ask</button>
+        ) : (
+          <button className="tao-button" onClick={signIn}>Log in</button>
+        )}
         {isLoading ? (
           <Loader show={true} />
         ) : (
