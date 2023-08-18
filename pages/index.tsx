@@ -61,6 +61,10 @@ export default function TaoTeChing() {
     }
   };
 
+  const handleLogin = () => {
+    auth.signInWithPopup(googleProvider);
+  }
+
   return (
     <div className="tao-container">
       <div style={{ textAlign: "center" }}>
@@ -77,15 +81,16 @@ export default function TaoTeChing() {
             className="tao-input"
           />
         </label>
-        {user ? (
-          <button type="submit" className="tao-button">Ask</button>
-        ) : (
-          <button className="tao-button" onClick={signIn}>Log in</button>
-        )}
         {isLoading ? (
           <Loader show={true} />
         ) : (
-          <button type="submit" className="tao-button">Ask</button>
+          <button
+            type="submit"
+            className="tao-button"
+            onClick={user ? handleSubmit : handleLogin}
+          >
+            {user ? 'Ask' : 'Login'}
+          </button>
         )}
       </form>
       {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
