@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
+import { auth, googleProvider } from '../lib/firebase';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
@@ -57,6 +58,10 @@ export default function TaoTeChing() {
     }
   };
 
+  const handleLogin = () => {
+    auth.signInWithPopup(googleProvider);
+  }
+
   return (
     <div className="tao-container">
       <div style={{ textAlign: "center" }}>
@@ -76,7 +81,13 @@ export default function TaoTeChing() {
         {isLoading ? (
           <Loader show={true} />
         ) : (
-          <button type="submit" className="tao-button">Ask</button>
+          <button
+            type="submit"
+            className="tao-button"
+            onClick={user ? handleSubmit : handleLogin}
+          >
+            {user ? 'Ask' : 'Login'}
+          </button>
         )}
       </form>
       {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
