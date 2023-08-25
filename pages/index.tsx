@@ -8,13 +8,7 @@ export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { user, credits } = useContext(UserContext);
-  const [apiKey, setApiKey] = useState<string | undefined>(
-    process.env.NEXT_PUBLIC_OPENAI_API_KEY
-  );
-  const signIn = () => {
-    auth.signInWithPopup(googleProvider);
-  }
+  const { user, credits, updateUser } = useContext(UserContext);
 
   const decrementCredits = async (uid: string) => {
     try {
@@ -25,7 +19,7 @@ export default function TaoTeChing() {
     }
   };
 
-  const getTaoTeChingResponse = async (question: string, apiKey: string) => {
+  const getTaoTeChingResponse = async (question: string) => {
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
     Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple. The response should be in prose that is relevant to the question and not rhyming poetry.`;
 
@@ -39,7 +33,7 @@ export default function TaoTeChing() {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     );
@@ -51,15 +45,15 @@ export default function TaoTeChing() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsLoading(true);
-    if (apiKey) {
-      const result = await getTaoTeChingResponse(question, apiKey);
+    if (user && credits !== undefined && credits > 0) {
+      const result = await getTaoTeChingResponse(question);
       setResponse(result);
       setIsLoading(false);
-      if (user) {
-        decrementCredits(user.uid);
-      }
+      decrementCredits(user.uid); // pass an object with a uid property
+      updateUser({ uid: user.uid});
     }
   };
+
 
   const handleLogin = () => {
     auth.signInWithPopup(googleProvider);
