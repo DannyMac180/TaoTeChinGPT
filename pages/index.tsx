@@ -85,7 +85,7 @@ export default function TaoTeChing() {
           <Loader show={true} />
         ) : (
           <button
-            type="submit"
+            type={user ? "submit" : "button"}
             className="tao-button"
             onClick={user ? handleSubmit : handleLogin}
           >
