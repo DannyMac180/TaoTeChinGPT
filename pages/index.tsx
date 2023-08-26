@@ -51,6 +51,10 @@ export default function TaoTeChing() {
       setIsLoading(false);
       decrementCredits(user.uid); // pass an object with a uid property
       updateUser({ uid: user.uid});
+    } else {
+      setIsLoading(false);
+      console.log(user, credits);
+      alert('You must be logged in and have credits to ask a question.');
     }
   };
 
