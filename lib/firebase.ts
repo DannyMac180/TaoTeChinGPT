@@ -5,7 +5,7 @@ import 'firebase/compat/storage';
 
 // Replace with your Firebase configuration object
 const firebaseConfig = {
-  apiKey: "AIzaSyCceO_iYahE2ScWHikqBdE6kgOzbaDzBFg",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "taotechingpt.firebaseapp.com",
   projectId: "taotechingpt",
   storageBucket: "taotechingpt.appspot.com",
