@@ -12,8 +12,15 @@ export default function TaoTeChing() {
 
   const decrementCredits = async (uid: string) => {
     try {
-      const response = await axios.post('/api/decrementCredits', { uid });
-      console.log(response.data.message);
+      const response = await fetch('/api/decrementCredits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ uid })
+      });
+      const data = await response.json();
+      console.log(data.message);
     } catch (error) {
       console.error(error);
     }
