@@ -3,28 +3,13 @@ import axios from 'axios';
 import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
 import { auth, googleProvider } from '@/lib/firebase';
+import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { user, credits, updateUser } = useContext(UserContext);
-
-  const decrementCredits = async (uid: string) => {
-    try {
-      const response = await fetch('/api/decrementCredits', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ uid })
-      });
-      const data = await response.json();
-      console.log(data.message);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const getTaoTeChingResponse = async (question: string) => {
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
@@ -56,7 +41,7 @@ export default function TaoTeChing() {
       const result = await getTaoTeChingResponse(question);
       setResponse(result);
       setIsLoading(false);
-      decrementCredits(user.uid); // pass an object with a uid property
+      decrementCredits(user.uid, 1);
       updateUser({ uid: user.uid});
     } else {
       setIsLoading(false);
