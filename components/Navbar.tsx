@@ -3,9 +3,12 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { auth, googleProvider } from '../lib/firebase';
 import { UserContext } from '@/contexts/UserContext';
+import { useEffect, useState } from 'react';
+import { firestore } from '../lib/firebase';
 
 export default function Navbar() {
-  const { user, credits } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const [credits, setCredits] = useState(0);
 
   const router = useRouter();
 
@@ -17,6 +20,18 @@ export default function Navbar() {
     auth.signOut();
     router.reload();
   }
+
+  useEffect(() => {
+    if (user) {
+      const docRef = firestore.collection('users').doc(user.uid);
+      const unsubscribe = docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          setCredits(doc.data()?.credits);
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   return (
     <nav className="navbar">

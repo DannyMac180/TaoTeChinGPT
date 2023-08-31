@@ -6,24 +6,17 @@ import { useUserData } from '@/lib/hooks';
 interface UserContextType {
   user: User | null | undefined;
   credits: number | undefined;
-  updateUser: (newData: Partial<User>) => void;
 }
 
 interface UserContextProviderProps {
   children: React.ReactNode;
-  updateUser: (newData: Partial<User>) => void;
 }
 
-export const UserContext = createContext<UserContextType>({ user: undefined, credits: undefined, updateUser: () => { } });
+export const UserContext = createContext<UserContextType>({ user: undefined, credits: undefined });
 
 export const UserContextProvider: React.FC<UserContextProviderProps> = ({ children }) => {
   const { user } = useUserData();
   const [userData, setUserData] = useState<any>(null);
-
-  const updateUser = (newData: Partial<User>) => {
-    if (!user) return;
-    setUserData({ ...user, ...newData });
-  };
 
   useEffect(() => {
     if (user) {
@@ -46,7 +39,7 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
 
   return (
     <>
-      <UserContext.Provider value={{ user, credits: userData?.credits, updateUser }}>
+      <UserContext.Provider value={{ user, credits: userData?.credits }}>
         {children}
       </UserContext.Provider>
     </>

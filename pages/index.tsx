@@ -8,8 +8,9 @@ import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
+  
   const [isLoading, setIsLoading] = useState(false);
-  const { user, credits, updateUser } = useContext(UserContext);
+  const { user, credits } = useContext(UserContext);
 
   const getTaoTeChingResponse = async (question: string) => {
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
@@ -42,7 +43,6 @@ export default function TaoTeChing() {
       setResponse(result);
       setIsLoading(false);
       decrementCredits(user.uid, 1);
-      updateUser({ uid: user.uid});
     } else {
       setIsLoading(false);
       console.log(user, credits);
@@ -87,3 +87,4 @@ export default function TaoTeChing() {
     </div >
   );
 }
+
