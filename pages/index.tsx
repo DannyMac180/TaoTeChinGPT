@@ -1,5 +1,4 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
+import { useState, useContext, useEffect } from 'react';
 import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
 import { auth, googleProvider } from '@/lib/firebase';
@@ -16,31 +15,33 @@ export default function TaoTeChing() {
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
     Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple. The response should be in prose that is relevant to the question and not rhyming poetry.`;
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: 'gpt-4',
-        messages: [{ "role": "system", "content": prompt },
-        { "role": "user", "content": question }]
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
-        },
-      }
-    );
+    const messages = [
+      { "role": "system", "content": prompt },
+      { "role": "user", "content": question }
+    ];
 
-    const generatedText = response.data.choices[0].message.content.trim();
-    return generatedText;
+    useEffect(() => {
+      const fetchData = async () => {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ messages: messages }),
+        });
+        const data = await res.text();
+        setResponse(data);
+      };
+    
+      fetchData();
+    }, []);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsLoading(true);
     if (user && credits !== undefined && credits > 0) {
-      const result = await getTaoTeChingResponse(question);
-      setResponse(result);
+      getTaoTeChingResponse(question);
       setIsLoading(false);
       decrementCredits(user.uid, 1);
     } else {
