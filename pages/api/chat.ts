@@ -1,24 +1,26 @@
 import OpenAI from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
  
+// Create an OpenAI API client (that's edge friendly!)
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
  
+// IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
  
 export async function POST(req: Request) {
+  // Extract the `messages` from the body of the request
   const { messages } = await req.json();
-  // Create a chat completion using OpenAI
+ 
+  // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
     model: 'gpt-4',
     stream: true,
     messages,
   });
- 
-  // Transform the response into a readable stream
+  // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response);
- 
-  // Return a StreamingTextResponse, which can be consumed by the client
+  // Respond with the stream
   return new StreamingTextResponse(stream);
 }
