@@ -11,7 +11,9 @@ function MyApp({ Component, pageProps }) {
     <>
       <UserContextProvider>
         <Navbar />
-        <Component {...pageProps} />
+        <div className="chat-component">
+          <Component {...pageProps} />
+        </div>
       </UserContextProvider>
       <Analytics />
     </>
