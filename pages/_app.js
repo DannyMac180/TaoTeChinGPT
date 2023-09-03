@@ -10,9 +10,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <UserContextProvider>
-        <Navbar>
-          <Component {...pageProps} />
-        </Navbar>
+        <Navbar />
+        <Component {...pageProps} />
       </UserContextProvider>
       <Analytics />
     </>
