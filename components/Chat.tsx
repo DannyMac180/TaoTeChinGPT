@@ -15,6 +15,11 @@ export default function Chat() {
           </div>
         ))}
       </section>
+      <section className="mb-auto m">
+        <div className="mb-4">
+          API Response: {JSON.stringify(messages)}
+        </div>
+      </section>
       <form className="flex space-x-4" onSubmit={handleSubmit}>
         <input
           className="rounded-md p-2 text-black"
