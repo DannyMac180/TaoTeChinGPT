@@ -53,7 +53,7 @@ export default function TaoTeChing() {
             console.log('Streaming done');
             // Handle completion of the streaming response
           } else {
-            const data = JSON.parse(chunk.slice(5)); // Remove the "data: " prefix
+            const data = JSON.parse(chunk.substring(5)); // Remove the "data: " prefix
             setResponseData(prevData => prevData + data.choices[0].delta.content);
           }
         }
