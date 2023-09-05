@@ -53,11 +53,15 @@ export default function TaoTeChing() {
             console.log('Streaming done');
             // Handle completion of the streaming response
           } else {
-            const data = JSON.parse(chunk.substring(5)); // Remove the "data: " prefix
-            setResponseData(prevData => prevData + data.choices[0].delta.content);
+            const potentialJson = chunk.substring(5);
+            try {
+              const data = JSON.parse(potentialJson); // Remove the "data: " prefix
+              setResponseData(prevData => prevData + data.choices[0].delta.content);
+            } catch (e) {
+              console.error('Invalid JSON:', potentialJson);
+            }
           }
         }
-      }
     };
 
     processStream();
