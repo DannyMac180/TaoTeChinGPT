@@ -57,6 +57,7 @@ export default function TaoTeChing() {
             try {
               const data = JSON.parse(potentialJson); // Remove the "data: " prefix
               setResponseData(prevData => prevData + data.choices[0].delta.content);
+              console.log(responseData);
             } catch (e) {
               console.error('Invalid JSON:', potentialJson);
             }
