@@ -62,9 +62,9 @@ export default function TaoTeChing() {
             }
           }
         }
+      }
+      processStream();
     };
-
-    processStream();
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -110,5 +110,5 @@ export default function TaoTeChing() {
       {responseData && <div className="tao-response-container"><p className="tao-response">{responseData}</p></div>}
     </div >
   );
-}
+};
 
