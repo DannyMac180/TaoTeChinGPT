@@ -89,7 +89,6 @@ export default function TaoTeChing() {
             className="tao-input"
           />
         </label>
-        (
         <button
           type={user ? "submit" : "button"}
           className="tao-button"
@@ -97,7 +96,6 @@ export default function TaoTeChing() {
         >
           {user ? 'Ask' : 'Login'}
         </button>
-        )
       </form>
       {response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
     </div >
