@@ -10,10 +10,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <UserContextProvider>
-        <Navbar />
-        <div className="chat-component">
+        <Navbar >
           <Component {...pageProps} />
-        </div>
+        </Navbar>
       </UserContextProvider>
       <Analytics />
     </>
