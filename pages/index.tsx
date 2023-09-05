@@ -63,7 +63,7 @@ export default function TaoTeChing() {
     e.preventDefault();
     setIsLoading(true);
     if (user && credits !== undefined && credits > 0) {
-      getTaoTeChingResponse(question);
+      await getTaoTeChingResponse(question);
       setIsLoading(false);
       decrementCredits(user.uid, 1);
     } else {
