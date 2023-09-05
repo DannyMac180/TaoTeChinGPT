@@ -5,7 +5,7 @@ import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
-  const [response, setResponse] = useState('');
+  const [responseData, setResponseData] = useState('');
 
   const { user, credits } = useContext(UserContext);
 
@@ -35,26 +35,32 @@ export default function TaoTeChing() {
     if (!reader) {
       throw new Error('Response body is undefined');
     }
-    const decoder = new TextDecoder('utf-8');
 
-    let result = '';
-    let data;
-
-    while (!(data = await reader.read()).done) {
-      const chunk = decoder.decode(data.value || new Uint8Array, { stream: !data.done });
-      const lines = chunk.split('\n');
-
-      for (let line of lines) {
-        if (line.startsWith('data:')) {
-          const message = JSON.parse(line.slice(5));
-          if (message.choices) {
-            result += message.choices[0].delta.content;
+    const processStream = async () => {
+      let accumulatedData = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          console.log('Streaming completed');
+          break;
+        }
+        const chunk = new TextDecoder().decode(value);
+        accumulatedData += chunk;
+        const chunks = accumulatedData.split('\n');
+        accumulatedData = chunks.pop() || ''; // Save any incomplete chunk for the next iteration
+        for (const chunk of chunks) {
+          if (chunk === '[DONE]') {
+            console.log('Streaming done');
+            // Handle completion of the streaming response
+          } else {
+            const data = JSON.parse(chunk.slice(5)); // Remove the "data: " prefix
+            setResponseData(prevData => prevData + data.choices[0].delta.content);
           }
         }
       }
-    }
+    };
 
-    setResponse(result);
+    processStream();
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -97,7 +103,7 @@ export default function TaoTeChing() {
           {user ? 'Ask' : 'Login'}
         </button>
       </form>
-      {response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
+      {responseData && <div className="tao-response-container"><p className="tao-response">{responseData}</p></div>}
     </div >
   );
 }
