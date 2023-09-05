@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
 import { auth, googleProvider } from '@/lib/firebase';
 import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
@@ -7,8 +6,7 @@ import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
-  
-  const [isLoading, setIsLoading] = useState(false);
+
   const { user, credits } = useContext(UserContext);
 
   const getTaoTeChingResponse = async (question: string) => {
@@ -43,7 +41,7 @@ export default function TaoTeChing() {
     let data;
 
     while (!(data = await reader.read()).done) {
-      const chunk = decoder.decode(data.value || new Uint8Array, {stream: !data.done});
+      const chunk = decoder.decode(data.value || new Uint8Array, { stream: !data.done });
       const lines = chunk.split('\n');
 
       for (let line of lines) {
@@ -61,13 +59,10 @@ export default function TaoTeChing() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setIsLoading(true);
     if (user && credits !== undefined && credits > 0) {
       await getTaoTeChingResponse(question);
-      setIsLoading(false);
       decrementCredits(user.uid, 1);
     } else {
-      setIsLoading(false);
       console.log(user, credits);
       alert('You must be logged in and have credits to ask a question.');
     }
@@ -94,19 +89,17 @@ export default function TaoTeChing() {
             className="tao-input"
           />
         </label>
-        {isLoading ? (
-          <Loader show={true} />
-        ) : (
-          <button
-            type={user ? "submit" : "button"}
-            className="tao-button"
-            onClick={user ? handleSubmit : handleLogin}
-          >
-            {user ? 'Ask' : 'Login'}
-          </button>
-        )}
+        (
+        <button
+          type={user ? "submit" : "button"}
+          className="tao-button"
+          onClick={user ? handleSubmit : handleLogin}
+        >
+          {user ? 'Ask' : 'Login'}
+        </button>
+        )
       </form>
-      {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
+      {response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
     </div >
   );
 }
