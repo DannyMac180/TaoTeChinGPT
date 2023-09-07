@@ -63,8 +63,8 @@ export default function TaoTeChing() {
             }
           }
         }
+        processStream();
       }
-      processStream();
     };
   };
 
