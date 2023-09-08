@@ -37,6 +37,7 @@ export default function TaoTeChing() {
     }
 
     const processStream = async () => {
+      console.log('Processing stream');
       let accumulatedData = '';
       while (true) {
         const { done, value } = await reader.read();
