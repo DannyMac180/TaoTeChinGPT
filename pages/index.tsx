@@ -72,7 +72,7 @@ export default function TaoTeChing() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (user && credits !== undefined && credits > 0) {
-      await getTaoTeChingResponse(question);
+      getTaoTeChingResponse(question);
       decrementCredits(user.uid, 1);
     } else {
       console.log(user, credits);
