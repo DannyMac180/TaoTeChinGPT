@@ -59,11 +59,13 @@ export default function TaoTeChing() {
             const potentialJson = chunk.substring(5);
             try {
               const data = JSON.parse(potentialJson); // Remove the "data: " prefix
-              if (data === 'undefined') {
-                break
-              }
-              setResponseData(prevData => prevData + data.choices[0].delta.content);
-              console.log(responseData);
+              setResponseData(prevData => {
+                let newData = prevData + data.choices[0].delta.content;
+                if (newData.endsWith('undefined')) {
+                  newData = newData.replace(/undefined$/, '');
+                }
+                return newData;
+              });
             } catch (e) {
               console.error('Invalid JSON:', potentialJson);
             }
