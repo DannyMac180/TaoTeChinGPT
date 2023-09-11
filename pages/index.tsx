@@ -65,9 +65,9 @@ export default function TaoTeChing() {
             }
           }
         }
-        await processStream();
       }
     };
+    processStream();
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -114,4 +114,3 @@ export default function TaoTeChing() {
     </div >
   );
 };
-
