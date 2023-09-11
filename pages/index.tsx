@@ -60,9 +60,9 @@ export default function TaoTeChing() {
             try {
               const data = JSON.parse(potentialJson); // Remove the "data: " prefix
               setResponseData(prevData => {
-                let newData = prevData + data.choices[0].delta.content;
+                let newData = (prevData + data.choices[0].delta.content).trim();
                 if (newData.endsWith('undefined')) {
-                  newData = newData.replace(/undefined$/, '');
+                  newData = newData.replace(/undefined$/, '').trim();
                 }
                 return newData;
               });
