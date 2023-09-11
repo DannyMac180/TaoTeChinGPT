@@ -385,6 +385,10 @@ input[type="file"] {
   animation: answer_fadeIn__qcpHP .5s ease-in-out forwards;
 }
 
+.chat-component {
+  margin-top: 70px;
+}
+
 @keyframes type {
   from {
     width: 0;

@@ -1,50 +1,87 @@
 import { useState, useContext } from 'react';
-import axios from 'axios';
-import Loader from '../components/Loader';
 import { UserContext } from '@/contexts/UserContext';
 import { auth, googleProvider } from '@/lib/firebase';
 import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
-  const [response, setResponse] = useState('');
-  
-  const [isLoading, setIsLoading] = useState(false);
+  const [responseData, setResponseData] = useState('');
+
   const { user, credits } = useContext(UserContext);
 
   const getTaoTeChingResponse = async (question: string) => {
+    setResponseData('');
+    
     const prompt = `You are the wise Taoist sage Lao Tzu. You respond to the question in the manner of the Tao Te Ching as translated by Stephen Mitchell. 
     Your response should communicate the following qualities: 1. Wise 2. Profound 3. Simple. The response should be in prose that is relevant to the question and not rhyming poetry.`;
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: 'gpt-4',
-        messages: [{ "role": "system", "content": prompt },
-        { "role": "user", "content": question }]
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
-        },
-      }
-    );
+    const messages = [
+      { "role": "system", "content": prompt },
+      { "role": "user", "content": question }
+    ];
 
-    const generatedText = response.data.choices[0].message.content.trim();
-    return generatedText;
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        'model': 'gpt-4',
+        'messages': messages,
+        'stream': true
+      }),
+    });
+
+    const reader = res.body?.getReader();
+    if (!reader) {
+      throw new Error('Response body is undefined');
+    }
+
+    const processStream = async () => {
+      console.log('Processing stream');
+      let accumulatedData = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          console.log('Streaming completed');
+          break;
+        }
+        const chunk = new TextDecoder().decode(value);
+        accumulatedData += chunk;
+        const chunks = accumulatedData.split('\n');
+        accumulatedData = chunks.pop() || ''; // Save any incomplete chunk for the next iteration
+        for (const chunk of chunks) {
+          if (chunk === '[DONE]') {
+            console.log('Streaming done');
+            // Handle completion of the streaming response
+          } else {
+            const potentialJson = chunk.substring(5);
+            try {
+              const data = JSON.parse(potentialJson); // Remove the "data: " prefix
+              setResponseData(prevData => {
+                let newData = (prevData + data.choices[0].delta.content).trim();
+                if (newData.endsWith('undefined')) {
+                  newData = newData.replace(/undefined$/, '').trim();
+                }
+                return newData;
+              });
+            } catch (e) {
+              console.error('Invalid JSON:', potentialJson);
+            }
+          }
+        }
+      }
+    };
+    processStream();
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setIsLoading(true);
     if (user && credits !== undefined && credits > 0) {
-      const result = await getTaoTeChingResponse(question);
-      setResponse(result);
-      setIsLoading(false);
+      getTaoTeChingResponse(question);
       decrementCredits(user.uid, 1);
     } else {
-      setIsLoading(false);
       console.log(user, credits);
       alert('You must be logged in and have credits to ask a question.');
     }
@@ -71,20 +108,15 @@ export default function TaoTeChing() {
             className="tao-input"
           />
         </label>
-        {isLoading ? (
-          <Loader show={true} />
-        ) : (
-          <button
-            type={user ? "submit" : "button"}
-            className="tao-button"
-            onClick={user ? handleSubmit : handleLogin}
-          >
-            {user ? 'Ask' : 'Login'}
-          </button>
-        )}
+        <button
+          type={user ? "submit" : "button"}
+          className="tao-button"
+          onClick={user ? handleSubmit : handleLogin}
+        >
+          {user ? 'Ask' : 'Login'}
+        </button>
       </form>
-      {!isLoading && response && <div className="tao-response-container"><p className="tao-response">{response}</p></div>}
+      {responseData && <div className="tao-response-container"><p className="tao-response">{responseData}</p></div>}
     </div >
   );
-}
-
+};
