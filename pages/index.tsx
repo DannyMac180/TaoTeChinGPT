@@ -1,13 +1,27 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '@/contexts/UserContext';
-import { auth, googleProvider } from '@/lib/firebase';
-import { incrementCredits, decrementCredits } from '@/lib/updateCredits';
+import { auth, googleProvider, firestore } from '@/lib/firebase';
+import { decrementCredits } from '@/lib/updateCredits';
 
 export default function TaoTeChing() {
   const [question, setQuestion] = useState('');
   const [responseData, setResponseData] = useState('');
+  const [credits, setCredits] = useState(0);
+  const { user } = useContext(UserContext);
 
-  const { user, credits } = useContext(UserContext);
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = firestore.collection('users').doc(user.uid)
+        .onSnapshot((doc) => {
+          if (doc.exists) {
+            setCredits(doc.data()?.credits);
+          }
+        });
+  
+      // Clean up the subscription
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   const getTaoTeChingResponse = async (question: string) => {
     setResponseData('');
@@ -78,7 +92,7 @@ export default function TaoTeChing() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    if (user && credits !== undefined && credits > 0) {
+    if (user && credits > 0) {
       getTaoTeChingResponse(question);
       decrementCredits(user.uid, 1);
     } else {
